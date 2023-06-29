@@ -1,0 +1,2 @@
+- A TS version project of workshop 'You Don't Need That Library' offered by Maximiliano Firtman in Front Masters
+- Some additional implementations were added (e.g. runtime type and input vaildation with zod)
