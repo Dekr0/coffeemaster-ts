@@ -7,18 +7,16 @@ export const CoffeeParser = z.object({
     description: z.string(),
     image: z.string()
 });
-export type Coffee = z.infer<typeof CoffeeParser>;
 
 export const CoffeeCategoryParser = z.object({
     name: z.string(),
     products: CoffeeParser.array()
 });
-export type CoffeeCategory = z.infer<typeof CoffeeCategoryParser>;
 
 export type Store = {
-    menu: CoffeeCategory[],
-    cart: Coffee[]
-}
+    menu: z.infer<typeof CoffeeCategoryParser>[];
+    cart: z.infer<typeof CoffeeParser>[];
+};
 
 const store: Store = {  // Manage the state of the app
     menu: [],

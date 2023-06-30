@@ -1,4 +1,4 @@
-import { CoffeeCategory, CoffeeCategoryParser } from "./Store";
+import { CoffeeCategoryParser } from "./Store";
 
 // use const to achieve Singleton
 const API = {  // for fetching data from the network
@@ -7,7 +7,7 @@ const API = {  // for fetching data from the network
         const result = await fetch(API.url);
         const raw = await result.json();
 
-        return CoffeeCategoryParser.array().parse(raw) as CoffeeCategory[];
+        return CoffeeCategoryParser.array().parse(raw);
     }
 };
 

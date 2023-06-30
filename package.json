@@ -7,6 +7,6 @@
     },
     "scripts": {
         "build": "tsc && npx webpack",
-        "dev": "npx serve ."
+        "dev": "npx serve --debug ."
     }
 }
