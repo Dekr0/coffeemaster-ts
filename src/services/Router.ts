@@ -21,7 +21,7 @@ const Router = {
         // Popstate when press back button
         window.addEventListener('popstate', e => {
             const state = StateParser.parse(e.state);
-            Router.go(state.route);
+            Router.go(state.route, false);  // Make no sense to pop one state and push back it => infinite loop
         });
 
         // Check the initial URL to cover the case the users enter the fake URL in the search bar
@@ -43,6 +43,17 @@ const Router = {
                 pageElement = document.createElement('h1');
                 pageElement.textContent = 'Order';
                 break;
+            default:  // detail page (page content is varied by products)
+                if (route.startsWith('/product-')) {  // another way is to use regex in switch case
+                pageElement = document.createElement('h1');
+                pageElement.textContent = 'Details';
+
+                const productId = route.substring(route.lastIndexOf('-') + 1);
+                // avoid setting element id using data Ids (especially straight from a database / data source)
+
+                // DOM elements have a collection / object that one can set both from HTML and JS for custom properties and custom data
+                pageElement.dataset.id = productId;  // It won't be parsed into the DOM by the browser (for custom library)
+            }
         }
         if (pageElement !== undefined && main !== null) { 
             main.innerHTML = ''; // brutal force

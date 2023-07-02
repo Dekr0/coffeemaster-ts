@@ -6,7 +6,11 @@
         "zod": "^3.21.4"
     },
     "scripts": {
-        "build": "tsc && npx webpack",
-        "dev": "npx serve --debug ."
+        "build": "tsc && npx webpack && mv ./dist/type/server.js ./server.js",
+        "dev": "node ./server.js"
+    },
+    "dependencies": {
+        "@fastify/static": "^6.10.2",
+        "fastify": "^4.19.0"
     }
 }
