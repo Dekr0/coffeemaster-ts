@@ -36,12 +36,10 @@ const Router = {
         let pageElement = undefined;
         switch (route) {
             case "/":
-                pageElement = document.createElement('h1');
-                pageElement.textContent = 'Menu';
+                pageElement = document.createElement('menu-page');
                 break;
             case "/order":
-                pageElement = document.createElement('h1');
-                pageElement.textContent = 'Order';
+                pageElement = document.createElement('order-page');
                 break;
             default:  // detail page (page content is varied by products)
                 if (route.startsWith('/product-')) {  // another way is to use regex in switch case
