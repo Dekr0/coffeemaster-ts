@@ -6,7 +6,7 @@
         "zod": "^3.21.4"
     },
     "scripts": {
-        "build": "tsc && npx webpack && mv ./dist/type/server.js ./server.js",
+        "build": "tsc && npx webpack && mv ./dist/app.js ./app.js && mv ./dist/type/server.js ./server.js",
         "dev": "node ./server.js"
     },
     "dependencies": {
