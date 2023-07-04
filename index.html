@@ -14,9 +14,9 @@
     <link rel="manifest" href="app.webmanifest">
     <link rel="apple-touch-icon" href="images/icons/icon.png">
     <link rel="icon" href="images/icons/icon.png">
-    <script src="./dist/app.js" defer type="module">
-        
-    </script>
+    <!-- link rel="preload" href="styles/MenuPage.css" as="stylesheet"> Browser will download it ASAP => improve performance-->
+    <!-- or inject directly into the tempalte -->
+    <script src="app.js" defer type="module"></script>
 </head>
 
 <body>
@@ -40,6 +40,7 @@
     <!-- The templates are not rendered in the web page although it is written in HTML file, and it is parsed into the DOM-->
     <template id="menu-page-template">
         <section>
+            <h2>This is the menu</h2>
             <ul id="menu"></ul>
         </section>
     </template>
