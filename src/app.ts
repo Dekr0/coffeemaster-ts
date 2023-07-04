@@ -2,6 +2,14 @@ import API from "./services/API";
 import Router from "./services/Router";
 import store from "./services/Store";
 
+import DetailPages from "./components/DetailPage";
+import MenuPage from "./components/MenuPage";
+import OrderPage from "./components/OrderPage";
+
+customElements.define('menu-page', MenuPage);
+customElements.define('order-page', OrderPage);
+customElements.define('details-page', DetailPages);
+
 // An dependency is created => whenever a state change, code that need access to 
 // the app state require `window.app` => refactor ? not necessary => adding 
 // abstraction create complexity 
