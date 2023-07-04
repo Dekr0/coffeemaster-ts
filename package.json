@@ -7,7 +7,8 @@
     },
     "scripts": {
         "build": "tsc && npx webpack && mv ./dist/app.js ./app.js && mv ./dist/type/server.js ./server.js",
-        "dev": "node ./server.js"
+        "dev": "node ./server.js",
+        "clean": "rm -r ./dist/ && rm ./app.js ./server.js"
     },
     "dependencies": {
         "@fastify/static": "^6.10.2",
