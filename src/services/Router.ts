@@ -42,19 +42,16 @@ const Router = {
                 pageElement = document.createElement('order-page');
                 break;
             default:  // detail page (page content is varied by products)
-                if (route.startsWith('/product-')) {  // another way is to use regex in switch case
+                if (route.startsWith('/product-')) {  // regex ? 
                 pageElement = document.createElement('h1');
                 pageElement.textContent = 'Details';
 
                 const productId = route.substring(route.lastIndexOf('-') + 1);
-                // avoid setting element id using data Ids (especially straight from a database / data source)
-
-                // DOM elements have a collection / object that one can set both from HTML and JS for custom properties and custom data
-                pageElement.dataset.id = productId;  // It won't be parsed into the DOM by the browser (for custom library)
+                pageElement.dataset.id = productId;
             }
         }
         if (pageElement !== undefined && main !== null) { 
-            main.innerHTML = ''; // brutal force
+            main.innerHTML = ''; // brute force
             main.appendChild(pageElement);
             window.scrollX = 0; window.scrollY = 0; // Reset screen position
         } else {

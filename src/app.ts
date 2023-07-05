@@ -19,6 +19,6 @@ window.app = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    window.app.store.menu = await API.fetchMenu();
     window.app.router.init();  // Init the router
+    window.app.store.menu = await API.fetchMenu();
 });

@@ -18,9 +18,28 @@ export type Store = {
     cart: z.infer<typeof CoffeeParser>[];
 };
 
-const store: Store = {  // Manage the state of the app
+const _store: Store = {  // Manage the state of the app
     menu: [],
     cart: []
 };
+
+const store = new Proxy<Store>(
+    _store,
+    {
+        set: (target, property, newValue, receiver) => {
+            console.log('Firing proxy');
+            let key = property as keyof Store;
+            target[key] = newValue;
+            if (property === 'menu') {
+                window.dispatchEvent(new Event('menuchange'));
+            } else if (property === 'cart') {
+                window.dispatchEvent(new Event('cartchange'));
+            } else {
+                throw new Error(`Undefined property ${String(property)}`);
+            }
+            return true;
+        }
+    }
+);
 
 export default store;
