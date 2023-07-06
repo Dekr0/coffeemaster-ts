@@ -25,11 +25,10 @@ const Router = {
         });
 
         // Check the initial URL to cover the case the users enter the fake URL in the search bar
-        console.log(location.pathname);
         Router.go(location.pathname);
     },
     go: (route: string, addToHistory: boolean=true) => {
-        console.log(`Going to ${route}`);
+        console.log(`Route ${route}`);
 
         if (addToHistory) history.pushState({ route } as z.infer<typeof StateParser>, '', route);
 
@@ -37,9 +36,11 @@ const Router = {
         switch (route) {
             case "/":
                 pageElement = document.createElement('menu-page');
+                console.log('Menu Page');
                 break;
             case "/order":
                 pageElement = document.createElement('order-page');
+                console.log('Order Page');
                 break;
             default:  // detail page (page content is varied by products)
                 if (route.startsWith('/product-')) {  // regex ? 

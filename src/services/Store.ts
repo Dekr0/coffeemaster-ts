@@ -13,13 +13,15 @@ export const CoffeeCategoryParser = z.object({
     products: CoffeeParser.array()
 });
 
+export type Coffee = z.infer<typeof CoffeeParser>;
+
 export type Store = {
-    menu: z.infer<typeof CoffeeCategoryParser>[];
-    cart: z.infer<typeof CoffeeParser>[];
+    menu: z.infer<typeof CoffeeCategoryParser>[] | null;
+    cart: Coffee[];
 };
 
 const _store: Store = {  // Manage the state of the app
-    menu: [],
+    menu: null,
     cart: []
 };
 
@@ -27,7 +29,6 @@ const store = new Proxy<Store>(
     _store,
     {
         set: (target, property, newValue, receiver) => {
-            console.log('Firing proxy');
             let key = property as keyof Store;
             target[key] = newValue;
             if (property === 'menu') {
