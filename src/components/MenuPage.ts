@@ -1,20 +1,15 @@
 // Refactor for generic web component ?
+const _template: HTMLTemplateElement | null = document.getElementById('menu-page-template') as HTMLTemplateElement;
+
 class MenuPage extends HTMLElement {
     private root;
-    private template;  // caching
-    private menu: HTMLUListElement | null;  // caching
-
-    private async loadCSS() {
-        const request = await fetch('/styles/MenuPage.css');
-        return await request.text();
-    }
+    private menuTag: HTMLUListElement | null | undefined;  // caching
 
     constructor() {
         super();
 
         this.root = this.attachShadow({ mode: 'open' });
-        this.template = document.getElementById('menu-page-template') as HTMLTemplateElement;
-        this.menu = null;
+        this.menuTag = undefined;
 
         window.addEventListener('menuchange', () => {
             this.render();
@@ -25,37 +20,44 @@ class MenuPage extends HTMLElement {
         // refactor
         const styles = document.createElement('style');
         this.root.appendChild(styles);
-        this.loadCSS().then((css) => {
-            styles.textContent = css;
-        })
 
-        const content = this.template.content.cloneNode(true);
-        this.root.appendChild(content);
+        fetch('/styles/MenuPage.css').
+            then(response => response.text()).
+            then(css => { styles.textContent = css });
+
+        if (_template !== null) {
+            const content = _template.content.cloneNode(true);
+            this.root.appendChild(content);
+        } else {
+            throw new Error('Template for <menu-page> is not available');
+        }
     }
 
     render() {
-        if (this.menu === null) {
-            this.menu = this.root.getElementById('menu') as HTMLUListElement;
+        if (!this.menuTag) {
+            this.menuTag = this.root.getElementById('menu') as HTMLUListElement;
         }
-        if (this.menu !== null) {
+
+        if (this.menuTag !== null) {
             if (window.app.store && window.app.store.menu !== null) {
-                this.menu.innerHTML = '';
+                this.menuTag.innerHTML = '';
+
                 for (const category of window.app.store.menu) {
                     const liCategory = document.createElement('li');
                     const ulProduct = document.createElement('ul');
                     ulProduct.id = 'category';
                     liCategory.innerHTML = `<h3>${category.name}</h3>`;
                     liCategory.appendChild(ulProduct);
-                    this.menu.appendChild(liCategory);
+                    this.menuTag.appendChild(liCategory);
 
                     for (const product of category.products) {
                         const item = document.createElement("product-item");
-                        item.dataset.product = JSON.stringify(product);
+                        item.dataset.product = JSON.stringify(product);  // pass down props in JSON string through dataset
                         ulProduct.appendChild(item);
                     }
                 }
             } else if (window.app.store) {
-               this.menu.innerHTML = 'Loading...';
+               this.menuTag.innerHTML = 'Loading...';
             }
         }
     }

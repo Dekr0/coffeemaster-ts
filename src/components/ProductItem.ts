@@ -1,17 +1,16 @@
 import { Coffee } from '../services/Store';
 
+const _template: HTMLTemplateElement | null = document.getElementById("product-item-template") as HTMLTemplateElement;  // caching
+
 export default class ProductItem extends HTMLElement {
-    private template: null | HTMLTemplateElement;
 
     constructor() {
         super();    
-
-        this.template = document.getElementById("product-item-template") as HTMLTemplateElement;
     }   
 
     connectedCallback() {
-        if (this.template !== null) {
-            const content = this.template.content.cloneNode(true);
+        if (_template !== null) {
+            const content = _template.content.cloneNode(true);
             this.appendChild(content);
             if (this.dataset.product !== undefined) {
                 const product: Coffee = JSON.parse(this.dataset.product);
@@ -27,22 +26,19 @@ export default class ProductItem extends HTMLElement {
 
                 const a = this.querySelector('a');
                 if (a !== null) a.addEventListener('click', event => {
+                    if (event.target !== null && event.target instanceof Element) {
+                        if (event.target.tagName.toLowerCase() === 'button') {
+
+                        } else {
+                            window.app.router.go(`/product-${product.id}`);
+                        }
+                    }
 
                     event.preventDefault();
                 });
             }
+        } else {
+            throw new Error('Template for <product-item> is not available');
         }
-
-        this.querySelector("a").addEventListener("click", event => {
-            console.log(event.target.tagName);
-            if (event.target.tagName.toLowerCase()=="button") {
-                //TODO
-            } else {
-                app.router.go(`/product-${product.id}`);
-            }
-            event.preventDefault();
-        })
-      }
+    }
 }
-
-customElements.define("product-item", ProductItem);
