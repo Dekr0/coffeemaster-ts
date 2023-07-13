@@ -1,23 +1,29 @@
 import { z } from 'zod';
 
-export const CoffeeParser = z.object({
-    id: z.number().nonnegative(),
+const nonnegative = z.number().nonnegative();
+
+export const ProductParser = z.object({
+    id: nonnegative,
     name: z.string().nonempty(),
-    price: z.number().nonnegative(),
+    price: nonnegative,
     description: z.string(),
-    image: z.string()
+    image: z.string(),
 });
 
-export const CoffeeCategoryParser = z.object({
+export const ProductCategoryParser = z.object({
     name: z.string(),
-    products: CoffeeParser.array()
+    products: ProductParser.array()
 });
 
-export type Coffee = z.infer<typeof CoffeeParser>;
+export const InCartProductParser = z.intersection(ProductParser, z.object({qtn: z.number().nonnegative()}));
+
+export type Product = z.infer<typeof ProductParser>;
+
+export type InCartProduct = z.infer<typeof InCartProductParser>;
 
 export type Store = {
-    menu: z.infer<typeof CoffeeCategoryParser>[] | null;
-    cart: Coffee[];
+    menu: z.infer<typeof ProductCategoryParser>[] | null;
+    cart: InCartProduct[];
 };
 
 const _store: Store = {  // Manage the state of the app

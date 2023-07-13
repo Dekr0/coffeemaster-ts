@@ -1,6 +1,8 @@
-import { Coffee } from '../services/Store';
+import { addCartById } from '../services/Order'; 
+import { Product } from '../services/Store';
+import { once, queryGuard } from './ComponentUtil';
 
-const _template: HTMLTemplateElement | null = document.getElementById("product-item-template") as HTMLTemplateElement;  // caching
+const template = once(() => queryGuard(() => document.getElementById('product-item-template') as HTMLTemplateElement));
 
 export default class ProductItem extends HTMLElement {
 
@@ -9,26 +11,25 @@ export default class ProductItem extends HTMLElement {
     }   
 
     connectedCallback() {
-        if (_template !== null) {
-            const content = _template.content.cloneNode(true);
+            const content = template().content.cloneNode(true);
             this.appendChild(content);
             if (this.dataset.product !== undefined) {
-                const product: Coffee = JSON.parse(this.dataset.product);
+                const product: Product = JSON.parse(this.dataset.product);
 
-                const name = this.querySelector('h4');
-                if (name !== null) name.textContent = product.name;
+                queryGuard(() => this.querySelector('h4')).
+                    textContent = product.name;
 
-                const price = this.querySelector('p.price');
-                if (price !== null) price.textContent = `$${product.price.toFixed(2)}`;
+                queryGuard(() => this.querySelector('p.price')).
+                    textContent = `$${product.price.toFixed(2)}`;
 
-                const img = this.querySelector('img');
-                if (img !== null) img.src = `data/images/${product.image}`;
+                queryGuard(() => this.querySelector('img')).
+                    src = `data/images/${product.image}`;
 
-                const a = this.querySelector('a');
-                if (a !== null) a.addEventListener('click', event => {
+                queryGuard(() => this.querySelector('a')).
+                    addEventListener('click', event => {
                     if (event.target !== null && event.target instanceof Element) {
                         if (event.target.tagName.toLowerCase() === 'button') {
-
+                            addCartById(product.id);
                         } else {
                             window.app.router.go(`/product-${product.id}`);
                         }
@@ -37,8 +38,5 @@ export default class ProductItem extends HTMLElement {
                     event.preventDefault();
                 });
             }
-        } else {
-            throw new Error('Template for <product-item> is not available');
-        }
     }
 }

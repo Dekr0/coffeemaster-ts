@@ -1,14 +1,14 @@
 import API from "./API";
-import { Coffee } from "./Store";
 
-export async function getProductById(id: number): Promise<Coffee | null> {
-    if (window.app.store.menu === null) window.app.store.menu = await API.fetchMenu();
+export async function getProductById(id: number) {
+    if (window.app.store.menu === null) 
+        window.app.store.menu = await API.fetchMenu();
     
-    for (let category of window.app.store.menu) {
-        for (let product of category.products) {
+    for (const category of window.app.store.menu) {
+        for (const product of category.products) {
             if (product.id === id) return product;
         }
     }
 
-    return null;
+    throw new Error(`Product with ${id} is not in the store menu`);
 }
